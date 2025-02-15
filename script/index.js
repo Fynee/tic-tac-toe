@@ -40,7 +40,7 @@ const Game = (() => {
             document.querySelector(`[data-index='${tile}']`).textContent = currentPlayer.symbol;
 
             if (checkWinner(currentPlayer)) {
-                DOM.alertAnim.start(`${currentPlayer.symbol} has won!`);
+                DOM.alertAnim.start(`player${currentPlayer.symbol.toUpperCase()} has won!`);
                 return;
             }
             if (GameBoard.availableTiles.length === 0) {
@@ -48,6 +48,11 @@ const Game = (() => {
                 return;
             }
             switchPlayer();
+        }
+
+        if (currentPlayer === playerO) {
+            const randomTile = GameBoard.availableTiles[Math.floor(Math.random() * GameBoard.availableTiles.length)];
+            makeMove(randomTile)
         }
     }
 
@@ -69,6 +74,8 @@ const Game = (() => {
     const checkCurrentPlayer = () => {
         return currentPlayer === playerX ? "playerX" : "playerO";
     }
+
+
 
     return {makeMove, restartGame, checkCurrentPlayer}
 })()
@@ -128,13 +135,11 @@ const DOM = (function (doc) {
                     cancelAnimationFrame(animate)
                     return
                 }
-
                 alertDiv.style.transform = `scale(${scaleValue})`;
                 scaleValue += 0.1;
                 requestAnimationFrame(animate)
             }
             animate()
-
         }
 
         const reset = () => {
@@ -144,6 +149,7 @@ const DOM = (function (doc) {
             doc.body.prepend(restartBtn);
             gameBoardDiv.style.display = "grid";
         }
+
         return {start, reset}
     })()
 
